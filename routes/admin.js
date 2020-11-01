@@ -12,13 +12,13 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/add-product', (req, res) => {
-  res.render('admin/add-product')
+  res.render('admin/add-product', { admin: true })
 });
 
 router.post('/add-product', (req, res) => {
   
   productHelpers.addProduct(req.body, (id) => {
-    console.log(id)
+
     let image = req.files.image;
     image.mv('./public/images/product-images/' +id+ '.jpg', (err, done) => {
       if(!err) {       
