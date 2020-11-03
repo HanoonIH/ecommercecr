@@ -2,27 +2,49 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8  my-5">
-                <h3>Your cart</h3>
+                <h3>My cart ({{cartItems.length}})</h3>
                 <table class="table table-hover">
                     <thead class="thead-dark">
                         <tr>
                             {{!-- <th scope="col">#</th> --}}
-                            <th scope="col">Image</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Description</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        {{#each products}}
+                        {{#each cartItems}}
                         <tr>
                             {{!-- <th scope="row">{{this._id}}</th> --}}
                             <td>
-                                <img src="/images/product-images/{{this._id}}.jpg" style="width: 50px;" alt="">
+                                <img src="/images/product-images/{{this._id}}.jpg" style="width: 200px;" alt="">
                             </td>
-                            <td>{{this.title}}</td>
-                            <td>{{this.price}}</td>
-                            <td>{{this.description}}</td>
+                            <td>
+                                <p class="h4">
+                                    {{this.title}}
+                                </p>
+                                <p>{{this.description}}</p>
+                                <p class="h4 font-weight-bold"><small>₹</small> {{this.price}}</p>
+                            </td>
+                            <td class="d-flex align-items-center">
+
+                                <a href="" class="h2">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-dash-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+</svg>
+                                </a>
+
+                                <h6 class="d-inline border border-primary rounded p-2 mx-2 align-middle">1</h6>
+
+                                <a href="" class="h2">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+</svg>
+                                </a>
+
+
+                            </td>
+                            <td>
+                                <a href="/remove-from-cart" class="btn btn-outline-danger">Remove</a>
+                            </td>
                         </tr>
                         {{/each}}
                     </tbody>

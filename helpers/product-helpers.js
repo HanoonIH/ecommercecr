@@ -23,11 +23,40 @@ module.exports = {
 
     deleteProduct: (productId) => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.PRODUCT_COLLECTION).removeOne({ _id: objectId(productId)})
+            db.get().collection(collection.PRODUCT_COLLECTION).removeOne({ _id: objectId(productId) })
             .then((data) => {
                 resolve(data);
             })
         })
     },
 
-}
+    getProductDetails: (productId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: objectId(productId) })
+            .then((data) => {
+                resolve(data);
+            })
+        })
+    },
+
+    editProduct: (productId, editedDetails) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.PRODUCT_COLLECTION)
+            .updateOne(
+                { _id: objectId(productId) },
+                {
+                    $set: {
+                        title: editedDetails.title,
+                        category: editedDetails.category,
+                        description: editedDetails.description,
+                        price: editedDetails.price,
+                    }
+                }
+            )
+            .then((response) => {
+                resolve()
+            })
+        })
+    },
+
+};
