@@ -2,6 +2,8 @@ const { response } = require('express');
 var express = require('express');
 var router = express.Router();
 
+const Swal = require('sweetalert2');
+
 var productHelpers = require('../helpers/product-helpers');
 var userHelpers = require('../helpers/user-helpers');
 
@@ -71,7 +73,6 @@ router.get('/logout', (req, res) => {
 router.get('/cart', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let cartItems = await userHelpers.getCartItems(req.session.user._id);
-  console.log(cartItems);
   res.render('user/cart', { cartItems, user })
 });
 
@@ -85,10 +86,22 @@ router.get('/add-to-cart/:id', (req, res) => {
 });
 
 router.post('/change-product-quantity', (req, res, next) => {
-  
   userHelpers.changeProductQuantity(req.body).then((response) => {
     res.json(response)
   })
 });
+
+router.get('/remove-from-cart/:cartId/:productId/:title', (req, res, next) => {
+  userHelpers.removeFromCart(req.params.cartId, req.params.productId).then((response) => {
+    // res.send({response})
+    console.log(req.params.title + " removed from cart");
+    res.redirect('/cart')
+  })
+});
+
+router.get('/place-order',verifyLogin, async (req, res) => {
+  let totalPrice = await userHelpers.getTotalPrice(req.session.user._id);
+  res.render('user/place-order', { hideSearch: true })
+})
 
 module.exports = router;

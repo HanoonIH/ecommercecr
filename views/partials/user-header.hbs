@@ -17,7 +17,9 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="/cart">Cart
-                        <span class="badge badge-warning align-top" id="cartCount">{{cartCount}}</span>
+                            <span class="badge badge-warning align-top" id="cartCount">
+                                {{cartCount}}
+                            </span>
                         </a>
                     </li>
 
@@ -31,8 +33,7 @@
             </div>
 
 
-            <div>
-
+            <div class="{{#if hideSearch}} d-none {{/if}}">
                 <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">

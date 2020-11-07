@@ -12,7 +12,7 @@
                     </thead>
                     <tbody>
                         {{#each cartItems}}
-                        <tr>
+                        <tr id="cartItem{{this.product._id}}">
 
                             {{!-- <th scope="row">{{this._id}}</th> --}}
                             <td>
@@ -28,8 +28,8 @@
 
                             <td class="d-flex align-items-center">
 
-                                <button href="" class="h2 btn btn-primary" {{#if (lte this.quantity 1)}} disabled {{/if}}
-                                    onclick="changeQuantity('{{this._id}}', '{{this.product._id}}', -1)">
+                                <button href="" class="h2 btn btn-primary" {{#if (lte this.quantity 1)}} disabled
+                                    {{/if}} onclick="changeQuantity('{{this._id}}', '{{this.product._id}}', -1)">
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-dash-circle-fill"
                                         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
@@ -38,8 +38,7 @@
                                 </button>
 
                                 <h6 id="{{this.product._id}}"
-                                    class="d-inline border border-primary rounded p-2 mx-2 align-middle"
-                                >
+                                    class="d-inline border border-primary rounded p-2 mx-2 align-middle">
                                     {{this.quantity}}
                                 </h6>
 
@@ -55,12 +54,44 @@
 
                             </td>
                             <td>
-                                <a href="/remove-from-cart" class="btn btn-outline-danger">Remove</a>
+                                <a href="/remove-from-cart/{{this._id}}/{{this.product._id}}/{{this.product.title}}"
+                                    class="btn btn-outline-danger">Remove</a>
                             </td>
                         </tr>
                         {{/each}}
+                        
+                        
                     </tbody>
                 </table>
+                <hr>
+                            <a href="/place-order" class="btn btn-primary btn-block mt-3">PLACE ORDER</a>
+                            <hr>
+            </div>
+
+            <div class="col-md-4 mt-5 align-self-start">
+                <div class="border border-success rounded p-3 mt-5">
+
+                    <h4>Price Details</h4>
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <p>Price ({{cartItems.length}} items)</p>
+                        <p>₹ 444</p>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <p>Delivery charges</p>
+                        <p class="text-success">Free</p>
+                    </div>
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <h4>Total Amount</h4>
+                        <h4 class="font-weight-bold"><span class="h5">₹</span> 400</h4>
+                    </div>
+
+                    <a href="/place-order" class="btn btn-primary btn-block mt-3">PLACE ORDER</a>
+                </div>
             </div>
         </div>
     </div>
@@ -71,18 +102,24 @@
         let quantity = parseInt(document.getElementById(productId).innerHTML);
         count = parseInt(count);
 
-        $.ajax({
-            url: '/change-product-quantity',
-            data: {
-                cart: cartId,
-                product: productId,
-                count: count,
-                quantity: quantity
-            },
-            method: 'post',
-            success: (response) => {
-                //document.getElementById(productId).innerHTML = quantity + count;
-            }
-        })
+        if (quantity == 1 && count == -1) {
+            return;
+        } else {
+            $.ajax({
+                url: '/change-product-quantity',
+                data: {
+                    cart: cartId,
+                    product: productId,
+                    count: count,
+                    quantity: quantity
+                },
+                method: 'post',
+                success: (response) => {
+                    document.getElementById(productId).innerHTML = quantity + count;
+                }
+            })
+        }
+
     }
+
 </script>
