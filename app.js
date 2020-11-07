@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var handlebars = require('handlebars')
 var hbs = require('express-handlebars');
 var fileUpload = require('express-fileupload');
 var session = require('express-session');
@@ -27,6 +28,26 @@ app.engine('hbs', hbs(
     partialsDir: __dirname + '/views/partials'
   }
 ));
+
+// handlebars custom helpers for conditional operators
+handlebars.registerHelper('eq', function(a, b) {
+  return (a === b);
+});
+handlebars.registerHelper('gt', function(a, b) {
+  return (a > b);
+});
+handlebars.registerHelper('gte', function(a, b) {
+  return (a >= b);
+});
+handlebars.registerHelper('lt', function(a, b) {
+  return (a < b);
+});
+handlebars.registerHelper('lte', function(a, b) {
+  return (a <= b);
+});
+handlebars.registerHelper('ne', function(a, b) {
+  return (a !== b);
+});
 
 app.use(logger('dev'));
 app.use(express.json());
