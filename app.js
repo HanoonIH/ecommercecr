@@ -49,6 +49,21 @@ handlebars.registerHelper('ne', function(a, b) {
   return (a !== b);
 });
 
+// handlebars math operators custom
+handlebars.registerHelper('plus', function (a, b) {
+  return parseInt(a) + parseInt(b);
+});
+handlebars.registerHelper('minus', function (a, b) {
+  return parseInt(a) - parseInt(b);
+});
+handlebars.registerHelper('multiply', function (a, b) {
+  return parseInt(a) * parseInt(b);
+});
+handlebars.registerHelper('divide', function (a, b) {
+  return parseInt(a) / parseInt(b);
+});
+// handlebars custom helper end //
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

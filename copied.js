@@ -1,3 +1,11 @@
+
+
+
+
+
+  
+
+//cart hbs
 <section>
     <div class="container">
         <div class="row">
@@ -13,6 +21,7 @@
                     <tbody>
                         {{#each cartItems}}
                         <tr id="cartItem{{this.product._id}}">
+
                             {{!-- <th scope="row">{{this._id}}</th> --}}
                             <td>
                                 <img src="/images/product-images/{{this.product._id}}.jpg" style="width: 200px;" alt="">
@@ -28,7 +37,7 @@
                             <td class="d-flex align-items-center">
 
                                 <button href="" class="h2 btn btn-primary" {{#if (lte this.quantity 1)}} disabled
-                                    {{/if}} onclick="changeQuantity('{{../user._id}}', '{{this._id}}', '{{this.product._id}}', -1)">
+                                    {{/if}} onclick="changeQuantity('{{this._id}}', '{{this.product._id}}', -1)">
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-dash-circle-fill"
                                         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
@@ -42,7 +51,7 @@
                                 </h6>
 
                                 <button href="" class="h2 btn btn-primary"
-                                    onclick="changeQuantity('{{../user._id}}', '{{this._id}}', '{{this.product._id}}', 1)">
+                                    onclick="changeQuantity('{{this._id}}', '{{this.product._id}}', 1)">
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle-fill"
                                         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
@@ -75,18 +84,18 @@
 
                     <div class="d-flex justify-content-between">
                         <p>Price ({{cartItems.length}} items)</p>
-                        <p>₹ <span id="cartTotal">{{totalPrice}}</span></p>
+                        <p>₹ 444</p>
                     </div>
 
                     <div class="d-flex justify-content-between">
                         <p>Delivery charges</p>
-                        <p class="text-success" id="deliveryCharge">40.00</p>
+                        <p class="text-success">Free</p>
                     </div>
                     <hr>
 
                     <div class="d-flex justify-content-between">
                         <h4>Total Amount</h4>
-                        <h4 class="font-weight-bold"><span class="h5">₹</span><span id="totalAmount"> {{plus totalPrice '40'}}</span></h4>
+                        <h4 class="font-weight-bold"><span class="h5">₹</span> 400</h4>
                     </div>
 
                     <a href="/place-order" class="btn btn-primary btn-block mt-3">PLACE ORDER</a>
@@ -97,15 +106,15 @@
 </section>
 
 <script>
-    function changeQuantity(userId, cartId, productId, count) {
+    function changeQuantity(cartId, productId, count) {
         let quantity = parseInt(document.getElementById(productId).innerHTML);
         count = parseInt(count);
-        
+
         if (quantity == 1 && count == -1) {
             return;
         } else {
             $.ajax({
-                url: `/change-product-quantity/${userId}`,
+                url: '/change-product-quantity',
                 data: {
                     cart: cartId,
                     product: productId,
@@ -115,8 +124,6 @@
                 method: 'post',
                 success: (response) => {
                     document.getElementById(productId).innerHTML = quantity + count;
-                    document.getElementById('cartTotal').innerHTML = response.totalPrice;
-                    document.getElementById('totalAmount').innerHTML = response.totalPrice + parseInt(document.getElementById('deliveryCharge').innerHTML);
                 }
             })
         }
