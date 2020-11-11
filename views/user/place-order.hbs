@@ -1,14 +1,13 @@
 <section>
     <div class="container">
+        <h3 class="text-center mx-auto">Complete your order</h3>
+        <h3 class="text-center">Total: Rs.{{totalPrice}}</h3>
         <div class="row">
 
-            <div class="mx-auto">
-               
-                <h3 class="text-center">Complete your order</h3>
-                <h3 class="text-center">Total: Rs.{{totalPrice}}</h3>
 
+            <div class=" col-md-8 mx-auto">
                 <hr>
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <ul class="nav nav-pills mb-3 d-flex" id="pills-tab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
                             aria-controls="pills-home" aria-selected="true">Delivery Address</a>
@@ -24,17 +23,181 @@
                 </ul>
                 <hr>
                 <div class="tab-content" id="pills-tabContent">
+
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                        aria-labelledby="pills-home-tab">...</div>
+                        aria-labelledby="pills-home-tab">
+                        <form action="" onchange="changeDeliveryAddress()" id="checkoutForm">
+
+                            <input type="text" name="userId" value="{{user._id}}" hidden>
+
+                            <label for="deliveryAddress" class="col-sm-2 col-form-label">Delivery Address</label>
+                            <input type="text" class="form-control" name="deliveryAddress" id="deliveryAddress"
+                                value="paikat house">
+
+                            <label for="pinCode" class="col-sm-2 col-form-label">Pincode</label>
+                            <input type="number" class="form-control" name="pinCode" id="pinCode" value="673312">
+
+                            <label for="phoneNumber" class="col-sm-2 col-form-label">Phone number</label>
+                            <input type="number" class="form-control" name="phoneNumber" id="phoneNumber"
+                                value="7356420465">
+
+                    </div>
+
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        ...</div>
+                        <h4>Choose Payment method</h4>
+                        <div class="form-check">
+                            <input onchange="changeDeliveryAddress()" class="form-check-input" type="radio"
+                                name="paymentMethod" id="payCod" value="COD" checked>
+                            <label class="form-check-label" for="payCod">Cash On Delivery</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input onchange="changeDeliveryAddress()" class="form-check-input" type="radio"
+                                name="paymentMethod" id="payOnline" value="ONLINE">
+                            <label class="form-check-label" for="payOnline">Online Payment</label>
+                        </div>
+
+                    </div>
+
                     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-                        ...</div>
+
+                        <h3>Order ID</h3>
+                        <h4>Contains</h4>
+
+                        <button type="submit" class="btn btn-success btn-block mt-3">CHECKOUT</button>
+
+                        </form>
+                    </div>
+
                 </div>
 
             </div>
 
+            <div class="col-md-4">
+                <div class="border border-success rounded p-3 mt-3">
+
+                    <h4>Order Details</h4>
+                    <hr>
+
+                    <div class="">
+                        <p>Delivery Address:</p>
+                        <p id="deliveryAdrs"></p>
+                        <p id="delPin"></p>
+                        <p id="delPh"></p>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <p>Delivery charges</p>
+                        <p class="text-success" id="deliveryCharge">40.00</p>
+                    </div>
+
+                    <div class="">
+                        <p>Payment Details:</p>
+                        <p id="payInfo"></p>
+                    </div>
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <h4>Total Amount</h4>
+                        <h4 class="font-weight-bold"><span class="h5">₹</span><span id="totalAmount">
+                                {{plus totalPrice '40'}}</span></h4>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
+
 </section>
 
+
+<script>
+
+    document.getElementById('checkoutForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        $.ajax({
+            url: '/place-order',
+            method: 'post',
+            data: $('#checkoutForm').serialize(),
+            success: (response) => {
+                console.log(response)
+                if (response.codSuccess) {
+                    location.href = '/order-successful'
+                } else {
+                    razorpayPayment(response);
+                }
+            }
+        });
+
+    });
+
+    function razorpayPayment(order) {
+        var options = {
+            "key": "rzp_test_RfIvkGgo123NXG", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "HIH Inc.",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                verifyPayment(response, order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+        });
+
+        rzp1.open();
+    };
+
+    function verifyPayment(payment, order) {
+        $.ajax({
+            url: '/verify-payment',
+            method: 'post',
+            data: {
+                payment,
+                order
+            },
+            success: (response) => {
+                if (response.status) {
+                    location.href = '/order-successful'
+                } else {
+                    alert('PAYMENT FAILED')
+                }
+            }
+        })
+    }
+
+    function changeDeliveryAddress() {
+        var delAd = document.getElementById("deliveryAddress").value;
+        var delPin = document.getElementById("pinCode").value;
+        var delPh = document.getElementById("phoneNumber").value;
+        var payInfo = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+        document.getElementById("deliveryAdrs").innerHTML = delAd;
+        document.getElementById("delPin").innerHTML = delPin;
+        document.getElementById("delPh").innerHTML = delPh;
+        document.getElementById("payInfo").innerHTML = payInfo;
+    }
+</script>

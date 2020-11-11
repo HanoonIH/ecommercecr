@@ -1,0 +1,44 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8  my-5 mx-auto">
+                <h3>Products of Order ({{orderId}})</h3>
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr></tr>
+                    </thead>
+                    <tbody>
+                        {{#each orderProducts}}
+                        <tr class="orderItemTable">
+                            <td>
+                                <img src="/images/product-images/{{this.product._id}}.jpg" style="width: 100px;" alt="">
+                            </td>
+                            <td>
+                                <p class="h4">
+                                    {{this.product.title}}
+                                </p>
+                                <p><small>₹</small> {{this.product.price}}</p>
+                                <p class="h4 font-weight-bold">Total: <small>₹</small>
+                                    {{multiply this.product.price this.quantity}}</p>
+                            </td>
+
+                            <td class="mt-3 p-5">
+                                <h6 class="d-inline border border-primary rounded p-2 mx-2 mt-5 align-middle">
+                                    {{this.quantity}} Kg.
+                                </h6>
+                            </td>
+                        </tr>
+                        {{/each}}
+
+                        <tr>
+                            <td></td>
+                            <td>
+                                <h3 class="font-weight-bold">Net Total: <small>₹</small> {{orderDetails.TotalAmount}}</h3>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</section>
