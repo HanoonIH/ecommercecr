@@ -1,5 +1,17 @@
 <section>
     <div class="container">
+
+        {{#if (lt cartItems.length 1)}}
+        <div class="my-5 p-5 border border-warning rounded d-flex justify-content-center">
+            <div class="align-self-center mr-md-3"><img src="/images/emptycart.png" style="height: 100px;" alt=""></div>
+            <div class="align-self-center">
+                <h1>Your cart is empty.</h1>
+                <a href="/" class="btn btn-primary btn-block">Purchase products</a>
+            </div>
+        </div>
+
+        {{else}}
+
         <div class="row">
             <div class="col-md-8  my-5">
                 <h3>My cart ({{cartItems.length}})</h3>
@@ -28,7 +40,8 @@
                             <td class="d-flex align-items-center">
 
                                 <button href="" class="h2 btn btn-primary" {{#if (lte this.quantity 1)}} disabled
-                                    {{/if}} onclick="changeQuantity('{{../user._id}}', '{{this._id}}', '{{this.product._id}}', -1)">
+                                    {{/if}}
+                                    onclick="changeQuantity('{{../user._id}}', '{{this._id}}', '{{this.product._id}}', -1)">
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-dash-circle-fill"
                                         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
@@ -58,13 +71,13 @@
                             </td>
                         </tr>
                         {{/each}}
-                        
-                        
+
+
                     </tbody>
                 </table>
                 <hr>
-                            <a href="/place-order" class="btn btn-primary btn-block mt-3">PLACE ORDER</a>
-                            <hr>
+                <a href="/place-order" class="btn btn-primary btn-block mt-3">PLACE ORDER</a>
+                <hr>
             </div>
 
             <div class="col-md-4 mt-5 align-self-start">
@@ -86,12 +99,15 @@
 
                     <div class="d-flex justify-content-between">
                         <h4>Total Amount</h4>
-                        <h4 class="font-weight-bold"><span class="h5">₹</span><span id="totalAmount"> {{plus totalPrice '40'}}</span></h4>
+                        <h4 class="font-weight-bold"><span class="h5">₹</span><span id="totalAmount">
+                                {{plus totalPrice '40'}}</span></h4>
                     </div>
 
                     <a href="/place-order" class="btn btn-primary btn-block mt-3">PLACE ORDER</a>
                 </div>
             </div>
+            {{/if}}
+
         </div>
     </div>
 </section>
@@ -100,7 +116,7 @@
     function changeQuantity(userId, cartId, productId, count) {
         let quantity = parseInt(document.getElementById(productId).innerHTML);
         count = parseInt(count);
-        
+
         if (quantity == 1 && count == -1) {
             return;
         } else {

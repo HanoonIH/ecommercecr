@@ -376,6 +376,42 @@ module.exports = {
                 resolve()
             })
         })
+    },
+
+    addToFavourite: (userId, productId) => {
+        return new Promise(async (resolve, reject) => {
+            let userFavourites = await db.get().collection(collection.FAVOURITE_COLLECTION)
+            .findOne({ user: objectId(userId) });
+
+            if(userFavourites) {
+                let isItemExistInFav = userFavourites.items.findIndex(item => item == productId); 
+
+                if(isItemExistInFav) {
+                    resolve()
+                } else {
+                    db.get().collection(collection.FAVOURITE_COLLECTION)
+                    .updateOne(
+                        { user: objectId(userId) },
+                        {
+                            $push: {
+                                items: objectId(productId)
+                            }
+                        }
+                    )
+                }
+
+            } else {
+                let favouriteObj = {
+                    user: objectId(userId),
+                    items: [ objectId(productId) ]
+                }
+
+                db.get().collection(collection.FAVOURITE_COLLECTION)
+                .insertOne(favouriteObj).then((response) => {
+                    resolve()
+                })
+            }
+        })
     }
 
 }

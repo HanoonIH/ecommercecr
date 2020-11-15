@@ -1,3 +1,4 @@
+
 function addToCart(productId) {
     $.ajax({
         url:"/add-to-cart/" + productId,
@@ -12,6 +13,16 @@ function addToCart(productId) {
     })
 }
 
+function addToFavourite(productId) {
+    $.ajax({
+        url: "/add-to-favourites/" + productId,
+        method: 'get',
+        success: (response) => {
+            console.log('successssss')
+        }
+    })
+}
+
 gsap.from(".procard", {duration: 1, opacity: 0, y: 100, stagger: 0.15});
-gsap.from(".cartItemTable", {duration: 1, opacity: 0, y: 150, stagger: 0.05});
 gsap.from(".orderItemTable", {duration: .75, opacity: 0, x: -50, stagger: 0.05});
+gsap.from(".cartItemTable", {duration: .75, opacity: 0, x: -50, stagger: 0.05});

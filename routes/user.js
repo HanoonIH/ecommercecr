@@ -75,13 +75,12 @@ router.get('/cart', verifyLogin, async (req, res) => {
   let cartItems = await userHelpers.getCartItems(req.session.user._id);
   let totalPrice = 0;
   if(cartItems.length > 0) {
-
     totalPrice = await userHelpers.getTotalPrice(req.session.user._id);
   }
   res.render('user/cart', { cartItems, totalPrice, user })
 });
 
-router.get('/add-to-cart/:id', (req, res) => {
+router.get('/add-to-cart/:id', verifyLogin, (req, res) => {
   console.log('added to cart')
   let productId = req.params.id;
   userHelpers.addToCart(req.session.user._id, productId).then(() => {
@@ -156,5 +155,26 @@ router.post('/verify-payment', (req, res) => {
     res.json({ status: false, errorMsg: 'ERROR' })
   })
 });
+
+router.get('/profile', (req, res) => {
+  res.render('user/profile')
+});
+
+router.get('/add-to-favourites/:id', (req, res) => {
+  let productId = req.params.id;
+  userHelpers.addToFavourite(req.session.user._id, productId).then((response) => {
+    res.json({ status: true })
+  })
+});
+
+router.get('/favourites', (req, res) => {
+  res.render('user/favourites')
+});
+
+router.get('/product/:id', async (req, res) => {
+  let product = await productHelpers.getProductDetails(req.params.id);
+  res.render('user/product-page', { product })
+});
+
 
 module.exports = router;

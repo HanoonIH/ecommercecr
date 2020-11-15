@@ -1,12 +1,14 @@
 <section>
     <div class="container">
 
-        <div class="row">
+        <div class="row d-flex justify-content-center">
 
             {{#each products}}
             <div class="col-md-3 m-2 procard">
                 <div class="card" style="width: 18rem;">
-                    <img src="images/product-images/{{this._id}}.jpg" class="card-img-top p-3" alt="...">
+                    <a href="/product/{{this._id}}">
+                        <img src="images/product-images/{{this._id}}.jpg" class="card-img-top p-3" alt="...">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">{{this.title}}</h5>
                         <h5 class="card-title"><small>₹</small> <strong>{{this.price}}</strong></h5>

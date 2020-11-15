@@ -1,0 +1,73 @@
+<section>
+    <div class="container">
+
+        {{#with product}}
+        <div class="row my-5 py-5">
+            <div class="col-md-6">
+                <img src="/images/product-images/{{this._id}}.jpg" alt="" style="max-width: 500px;">
+            </div>
+
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between">
+                    <h2>{{this.title}}</h2>
+                    <label class="fav-container">
+                        <input type="checkbox" onchange="toggleFavourite()" name="" id="">
+                        <i onclick="addToFavourite('{{this._id}}')" class="fa fa-heart-o fav-icon"></i>
+                    </label>
+                </div>
+                <h3>
+                    <bold><small>₹</small> {{this.price}}</bold>
+                </h3>
+                <p>⭐⭐⭐⭐ (1346)</p>
+                <p>{{this.description}}</p>
+                <button onclick="addToCart('{{this._id}}')" class="btn btn-success">Add to cart</button>
+                <a href="" class="btn btn-primary">Buy now</a>
+            </div>
+        </div>
+        {{/with}}
+
+    </div>
+</section>
+
+<style>
+    .fav-container {
+        position: relative;
+    }
+
+    .fav-container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .fav-icon {
+        font-size: 24px;
+    }
+
+    .fav-icon-checked {
+        color: red;
+    }
+
+    /*.fav-container input:checked~.fav-icon {
+        fill: red;
+    }*/
+</style>
+
+<script>
+    var favCheckbox = document.querySelector('.fav-container input');
+    var favIcon = document.querySelector('.fav-icon');
+
+    function toggleFavourite() {
+        if(favCheckbox.checked == true) {
+            console.log('checked');
+            favIcon.classList.remove('fa-heart-o');
+            favIcon.classList.add('fa-heart', 'fav-icon-checked');
+        } else {
+            console.log('unchecked');
+            favIcon.classList.remove('fa-heart', 'fav-icon-checked');
+            favIcon.classList.add('fa-heart-o');
+        }
+    }
+</script>
