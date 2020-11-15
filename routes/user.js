@@ -167,12 +167,22 @@ router.get('/add-to-favourites/:id', (req, res) => {
   })
 });
 
-router.get('/favourites', (req, res) => {
-  res.render('user/favourites')
+router.get('/favourites', verifyLogin, async (req, res) => {
+  let user = req.session.user;
+  let favourites = await userHelpers.getFavouriteItems(req.session.user._id);
+  res.render('user/favourites', { user, favourites })
+});
+
+router.get('/remove-from-favourites/:id', (req, res) => {
+  let productId = req.params.id;
+  userHelpers.removeFromFavourite(req.session.user._id, productId).then((response) => {
+    res.json({ status: true })
+  })
 });
 
 router.get('/product/:id', async (req, res) => {
   let product = await productHelpers.getProductDetails(req.params.id);
+  console.log(product);
   res.render('user/product-page', { product })
 });
 

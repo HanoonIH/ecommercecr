@@ -11,8 +11,8 @@
                 <div class="d-flex justify-content-between">
                     <h2>{{this.title}}</h2>
                     <label class="fav-container">
-                        <input type="checkbox" onchange="toggleFavourite()" name="" id="">
-                        <i onclick="addToFavourite('{{this._id}}')" class="fa fa-heart-o fav-icon"></i>
+                        <input type="checkbox" onchange="toggleFavourite('{{this._id}}')">
+                        <i class="fa fa-heart-o fav-icon"></i>
                     </label>
                 </div>
                 <h3>
@@ -59,15 +59,17 @@
     var favCheckbox = document.querySelector('.fav-container input');
     var favIcon = document.querySelector('.fav-icon');
 
-    function toggleFavourite() {
+    function toggleFavourite(productId) {
         if(favCheckbox.checked == true) {
             console.log('checked');
             favIcon.classList.remove('fa-heart-o');
             favIcon.classList.add('fa-heart', 'fav-icon-checked');
+            addToFavourite(productId);
         } else {
             console.log('unchecked');
             favIcon.classList.remove('fa-heart', 'fav-icon-checked');
             favIcon.classList.add('fa-heart-o');
+            removeFromFavourite(productId);
         }
     }
 </script>

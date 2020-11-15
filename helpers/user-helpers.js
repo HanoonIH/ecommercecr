@@ -379,6 +379,7 @@ module.exports = {
     },
 
     addToFavourite: (userId, productId) => {
+        let favItem = objectId(productId);
         return new Promise(async (resolve, reject) => {
             let userFavourites = await db.get().collection(collection.FAVOURITE_COLLECTION)
             .findOne({ user: objectId(userId) });
@@ -386,18 +387,20 @@ module.exports = {
             if(userFavourites) {
                 let isItemExistInFav = userFavourites.items.findIndex(item => item == productId); 
 
-                if(isItemExistInFav) {
-                    resolve()
+                if(isItemExistInFav != -1) {
+                    resolve('already item faved')
                 } else {
                     db.get().collection(collection.FAVOURITE_COLLECTION)
                     .updateOne(
                         { user: objectId(userId) },
                         {
                             $push: {
-                                items: objectId(productId)
+                                items: favItem
                             }
                         }
-                    )
+                    ).then((response) => {
+                        resolve('new fav updated')
+                    })
                 }
 
             } else {
@@ -408,10 +411,62 @@ module.exports = {
 
                 db.get().collection(collection.FAVOURITE_COLLECTION)
                 .insertOne(favouriteObj).then((response) => {
-                    resolve()
+                    resolve('fav new user created')
                 })
             }
         })
-    }
+    },
+
+    removeFromFavourite: (userId, productId) => {
+        return new Promise((resolve, reject) => {  
+            db.get().collection(collection.FAVOURITE_COLLECTION)
+            .updateOne(
+                { user: objectId(userId) },
+                {
+                    $pull: {
+                        items: objectId(productId)
+                    }
+                }
+            ).then((response) => {
+                resolve();
+            })
+        })
+    },
+
+    getFavouriteItems: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let favItems = await db.get().collection(collection.FAVOURITE_COLLECTION)
+            .aggregate([
+                {
+                    $match: { user: objectId(userId) }
+                }, 
+                {
+                    $unwind: '$items'
+                },
+                {
+                    $project: {
+                        item: '$items'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'productDetails'
+                    }
+                },
+                {
+                    $project: {
+                        item: 1,
+                        product: {
+                            $arrayElemAt: ['$productDetails', 0]
+                        }
+                    }
+                }
+            ]).toArray()
+            resolve(favItems)
+        });
+    },
 
 }

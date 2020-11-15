@@ -4,45 +4,22 @@
         <div class="row">
             <h3 class="mx-auto mt-5">Your Favourites</h3>
         </div>
+        <hr>
         <table class="table table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Order</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Payment</th>
-                    <th scope="col">Delivery Address</th>
-                    <th scope="col">Status</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
+
             <tbody>
 
-                {{#each orders}}
-                <tr>
+                {{#each favourites}}
+                <tr class="orderItemTable">
                     <td>
-                        <p>{{this._id}}</p>
-                        <p class="font-weight-bold">{{this.Time}}</p>
+                        <img src="/images/product-images/{{this.product._id}}.jpg" style="width: 100px;" alt="">
                     </td>
-                    <td>₹ {{this.TotalAmount}}</td>
-                    <td>{{this.PaymentMethod}}</td>
                     <td>
-                        {{#with DeliveryDetails}}
-                        <p class="font-weight-bold">{{this.Pincode}}</p>
-                        <p>{{this.Address}}</p>
-                        <p>{{this.Phone}}</p>
-                        {{/with}}
-                    </td>
-                    <td>{{this.Status}}</td>
-                    <td>
-                        <a href="/view-order-products/{{this._id}}" class="btn btn-primary">
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
-                                <path fill-rule="evenodd"
-                                    d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
-                            </svg>
-                            View order
-                        </a>
+                        <p class="h4">
+                            {{this.product.title}}
+                        </p>
+                        <p>{{this.product.description}}</p>
+                        <p><small>₹</small> {{this.product.price}}</p>
                     </td>
                 </tr>
                 {{/each}}
