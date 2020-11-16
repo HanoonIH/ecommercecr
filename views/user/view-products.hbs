@@ -7,14 +7,16 @@
             <div class="col-md-3 m-2 procard">
                 <div class="card" style="width: 18rem;">
                     <div class="image-fav-container">
+
                         <label class="fav-container tag">
-                            <input type="checkbox" onchange="toggleFavourite('{{this._id}}')" {{#if ../favourite}}
-                                checked='checked' {{/if}}>
+                            <input type="checkbox">
                             <i class="fa fa-heart-o fav-icon"></i>
                         </label>
+
                         <a href="/product/{{this._id}}">
                             <img src="images/product-images/{{this._id}}.jpg" class="card-img-top p-3" alt="...">
                         </a>
+
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{this.title}}</h5>
@@ -87,30 +89,5 @@
 </style>
 
 <script>
-    var favCheckboxes = Array.from(document.querySelectorAll('.fav-container input'));
-    var favIcons = Array.from(document.querySelectorAll('.fav-icon'));
-
-    favCheckboxes.forEach(favCheckbox) {
-        if (favCheckbox.checked == true) {
-            favIcon.classList.remove('fa-heart-o');
-            favIcon.classList.add('fa-heart', 'fav-icon-checked');
-        } else {
-            favIcon.classList.remove('fa-heart', 'fav-icon-checked');
-            favIcon.classList.add('fa-heart-o');
-        }
-    }
-
-    function toggleFavourite(productId) {
-        if (this.checked == true) {
-            console.log('checked');
-            favIcon.classList.remove('fa-heart-o');
-            favIcon.classList.add('fa-heart', 'fav-icon-checked');
-            addToFavourite(productId);
-        } else {
-            console.log('unchecked');
-            favIcon.classList.remove('fa-heart', 'fav-icon-checked');
-            favIcon.classList.add('fa-heart-o');
-            removeFromFavourite(productId);
-        }
-    }
+    
 </script>

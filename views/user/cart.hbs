@@ -22,9 +22,9 @@
 
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="favouriteItemTable border">
                         {{#each cartItems}}
-                        <tr id="cartItem{{this.product._id}}" class="cartItemTable">
+                        <tr id="cartItem{{this.product._id}}">
                             {{!-- <th scope="row">{{this._id}}</th> --}}
                             <td>
                                 <img src="/images/product-images/{{this.product._id}}.jpg" style="width: 200px;" alt="">
@@ -66,6 +66,8 @@
 
                             </td>
                             <td>
+                                <button href="/remove-from-cart/{{this._id}}/{{this.product._id}}/{{this.product.title}}"
+                                    class="btn btn-outline-warning text-dark mb-2">Move to <i class="fa fa-heart text-danger"></i></button>
                                 <a href="/remove-from-cart/{{this._id}}/{{this.product._id}}/{{this.product.title}}"
                                     class="btn btn-outline-danger">Remove</a>
                             </td>

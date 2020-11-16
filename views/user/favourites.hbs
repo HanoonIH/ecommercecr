@@ -1,31 +1,82 @@
 <section>
     <div class="container">
 
+        {{#if (eq favourites.length 0)}}
+        <div class="my-5 p-5 border border-warning rounded d-flex justify-content-center">
+            <div class="align-self-center mr-md-3"><img src="/images/broken-heart.png" style="height: 120px;" alt=""></div>
+            <div class="align-self-center">
+                <h1>You've No Favourites.</h1>
+                <a href="/" class="btn btn-primary btn-block">View All products</a>
+            </div>
+        </div>
+
+        {{else}}
+
         <div class="row">
             <h3 class="mx-auto mt-5">Your Favourites</h3>
         </div>
-        <hr>
+        {{/if}}
+
         <table class="table table-hover">
-
-            <tbody>
-
+            <tbody class="favouriteItemTable border">
                 {{#each favourites}}
-                <tr class="orderItemTable">
+                <tr >
                     <td>
-                        <img src="/images/product-images/{{this.product._id}}.jpg" style="width: 100px;" alt="">
+                        <img src="/images/product-images/{{this.product._id}}.jpg" style="width: 150px;" alt="">
                     </td>
                     <td>
                         <p class="h4">
                             {{this.product.title}}
                         </p>
+                        <button onclick="moveToCart('{{this.product._id}}')" class="btn btn-primary">Move to cart</button>
+                    </td>
+                    <td>  
                         <p>{{this.product.description}}</p>
-                        <p><small>₹</small> {{this.product.price}}</p>
+                        <h5><small>₹</small> {{this.product.price}}</h5>
+                    </td>
+                    <td>
+                        <label class="fav-container">
+                            <input type="checkbox" onclick="removeFavourite('{{this.product._id}}')" checked>
+                            <i class="fa fa-heart fav-icon"></i>
+                        </label>
                     </td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
-
-
     </div>
 </section>
+
+
+<style>
+    .fav-container {
+        position: relative;
+    }
+
+    .fav-container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .fav-icon {
+        font-size: 20px;
+        color: red;
+    }
+</style>
+
+<script>
+    async function removeFavourite(productId) {
+        await removeFromFavourite(productId);
+        location.reload();
+    }
+
+    function moveToCart(productId) {
+        addToCart(productId);
+        removeFromFavourite(productId);
+        location.reload();
+    }
+
+</script>

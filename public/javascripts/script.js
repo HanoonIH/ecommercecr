@@ -35,4 +35,5 @@ function removeFromFavourite(productId) {
 
 gsap.from(".procard", {duration: 1, opacity: 0, y: 100, stagger: 0.15});
 gsap.from(".orderItemTable", {duration: .75, opacity: 0, x: -50, stagger: 0.05});
-gsap.from(".cartItemTable", {duration: .75, opacity: 0, x: -50, stagger: 0.05});
+gsap.from(".cartItemTable", {duration: .75, opacity: 0, x: -50, stagger: 0.05}); 
+gsap.from(".favouriteItemTable", {duration: .75, opacity: 0, y: 50, stagger: 0.05}); 
