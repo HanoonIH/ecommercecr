@@ -10,8 +10,10 @@
             <div class="col-md-6">
                 <div class="d-flex justify-content-between">
                     <h2>{{this.title}}</h2>
+                    {{!-- <input type="checkbox" {{#if favourite}} checked='checked' {{/if}} name="" id=""> --}}
                     <label class="fav-container">
-                        <input type="checkbox" onchange="toggleFavourite('{{this._id}}')">
+                        <input type="checkbox" onchange="toggleFavourite('{{this._id}}')" {{#if ../favourite}}
+                            checked='checked' {{/if}}>
                         <i class="fa fa-heart-o fav-icon"></i>
                     </label>
                 </div>
@@ -50,17 +52,25 @@
         color: red;
     }
 
-    /*.fav-container input:checked~.fav-icon {
-        fill: red;
-    }*/
+    .fav-container input:checked~.fav-icon {
+        color: red;
+    }
 </style>
 
 <script>
     var favCheckbox = document.querySelector('.fav-container input');
     var favIcon = document.querySelector('.fav-icon');
 
+    if (favCheckbox.checked == true) {
+        favIcon.classList.remove('fa-heart-o');
+        favIcon.classList.add('fa-heart', 'fav-icon-checked');
+    } else {
+        favIcon.classList.remove('fa-heart', 'fav-icon-checked');
+        favIcon.classList.add('fa-heart-o');
+    }
+
     function toggleFavourite(productId) {
-        if(favCheckbox.checked == true) {
+        if (favCheckbox.checked == true) {
             console.log('checked');
             favIcon.classList.remove('fa-heart-o');
             favIcon.classList.add('fa-heart', 'fav-icon-checked');

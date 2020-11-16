@@ -6,9 +6,16 @@
             {{#each products}}
             <div class="col-md-3 m-2 procard">
                 <div class="card" style="width: 18rem;">
-                    <a href="/product/{{this._id}}">
-                        <img src="images/product-images/{{this._id}}.jpg" class="card-img-top p-3" alt="...">
-                    </a>
+                    <div class="image-fav-container">
+                        <label class="fav-container tag">
+                            <input type="checkbox" onchange="toggleFavourite('{{this._id}}')" {{#if ../favourite}}
+                                checked='checked' {{/if}}>
+                            <i class="fa fa-heart-o fav-icon"></i>
+                        </label>
+                        <a href="/product/{{this._id}}">
+                            <img src="images/product-images/{{this._id}}.jpg" class="card-img-top p-3" alt="...">
+                        </a>
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">{{this.title}}</h5>
                         <h5 class="card-title"><small>₹</small> <strong>{{this.price}}</strong></h5>
@@ -24,14 +31,86 @@
     </div>
 </section>
 
+
+<style>
+    .image-fav-container {
+        position: relative;
+    }
+
+    .tag {
+        opacity: 0;
+        float: right;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: 1000;
+        border-left: 1px solid rgb(179, 177, 177);
+        border-bottom: 1px solid rgb(179, 177, 177);
+        border-bottom-left-radius: 5px;
+        padding: 5px;
+        color: #000000;
+        font-weight: bold;
+    }
+
+    .card:hover .tag {
+        opacity: 1;
+        transition: .75s;
+    }
+
+    .fav-container {
+        position: relative;
+    }
+
+    .fav-container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .fav-icon {
+        font-size: 18px;
+    }
+
+    .fa-heart-o {
+        color: red;
+    }
+
+    .fav-icon-checked {
+        color: red;
+    }
+
+    .fav-container input:checked~.fav-icon {
+        color: red;
+    }
+</style>
+
 <script>
-    //function addToCart(productId) {
-    //    $.ajax({
-    //        url:"/add-to-cart/" + productId,
-    //        method: 'get',
-    //        success: (response) => {
-    //            alert(response)
-    //        }
-    //    })
-    //}
+    var favCheckboxes = Array.from(document.querySelectorAll('.fav-container input'));
+    var favIcons = Array.from(document.querySelectorAll('.fav-icon'));
+
+    favCheckboxes.forEach(favCheckbox) {
+        if (favCheckbox.checked == true) {
+            favIcon.classList.remove('fa-heart-o');
+            favIcon.classList.add('fa-heart', 'fav-icon-checked');
+        } else {
+            favIcon.classList.remove('fa-heart', 'fav-icon-checked');
+            favIcon.classList.add('fa-heart-o');
+        }
+    }
+
+    function toggleFavourite(productId) {
+        if (this.checked == true) {
+            console.log('checked');
+            favIcon.classList.remove('fa-heart-o');
+            favIcon.classList.add('fa-heart', 'fav-icon-checked');
+            addToFavourite(productId);
+        } else {
+            console.log('unchecked');
+            favIcon.classList.remove('fa-heart', 'fav-icon-checked');
+            favIcon.classList.add('fa-heart-o');
+            removeFromFavourite(productId);
+        }
+    }
 </script>

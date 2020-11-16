@@ -181,8 +181,20 @@ router.get('/remove-from-favourites/:id', (req, res) => {
 });
 
 router.get('/product/:id', async (req, res) => {
+  let user = req.session.user;
+  if(user) {
+    let product = await productHelpers.getProductDetails(req.params.id);
+    let favouritesIds = await userHelpers.getFavouriteItemsIds(req.session.user._id);
+    let idArray = [];
+    await favouritesIds.forEach(obj => {
+      idArray.push(`${obj.item}`)
+    });
+    let favourite = idArray.includes(req.params.id);
+
+    res.render('user/product-page', { user, product, favourite })
+  }
+
   let product = await productHelpers.getProductDetails(req.params.id);
-  console.log(product);
   res.render('user/product-page', { product })
 });
 

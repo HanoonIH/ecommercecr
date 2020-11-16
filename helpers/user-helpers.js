@@ -469,4 +469,38 @@ module.exports = {
         });
     },
 
+    getFavouriteItemsIds: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let favItems = await db.get().collection(collection.FAVOURITE_COLLECTION)
+            .aggregate([
+                {
+                    $match: { user: objectId(userId) }
+                }, 
+                {
+                    $unwind: '$items'
+                },
+                {
+                    $project: {
+                        item: '$items'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'productDetails'
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        item: 1,
+                    }
+                }
+            ]).toArray()
+            resolve(favItems)
+        });
+    },
+
 }
