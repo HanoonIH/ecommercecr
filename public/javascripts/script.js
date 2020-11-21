@@ -18,7 +18,18 @@ function addToFavourite(productId) {
         url: "/add-to-favourites/" + productId,
         method: 'get',
         success: (response) => {
-            console.log('successssss')
+            console.log('successssss');
+            location.reload();
+        }
+    })
+}
+
+function moveToFavourite(cartId, productId, title) {
+    $.ajax({
+        url: "/add-to-favourites/" + productId,
+        method: 'get',
+        success: (response) => {
+            location.href = `/remove-from-cart/${cartId}/${productId}/${title}`
         }
     })
 }
@@ -28,7 +39,8 @@ function removeFromFavourite(productId) {
         url: "/remove-from-favourites/" + productId,
         method: 'get',
         success: (response) => {
-            console.log('successssss')
+            console.log('successssss removed from favourites');
+            location.reload();
         }
     })
 }

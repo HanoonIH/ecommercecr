@@ -68,15 +68,14 @@
 </style>
 
 <script>
-    async function removeFavourite(productId) {
-        await removeFromFavourite(productId);
-        location.reload();
+    function removeFavourite(productId) {
+        removeFromFavourite(productId);
     }
 
     function moveToCart(productId) {
         addToCart(productId);
         removeFromFavourite(productId);
-        location.reload();
+        
     }
 
 </script>
